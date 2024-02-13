@@ -29,7 +29,6 @@ ars arr[al];
 ars *ar = arr;
 
 void XMLCALL se(void *d,const char *s,const char **a) {
-  // ars *ar=malloc(sizeof(ars) * an);
   int *dp=d;
   if (*dp==2&&!strcmp(s,"HostEntry")) { cx=1; ct++; /* if (ct++==cn) ar=realloc(ar,sizeof(ars)*(cn*=2)); */ }
   else if (*dp==3&&cx==1) {
@@ -49,7 +48,6 @@ void XMLCALL ee(void *d,const char *s) {
 }
 
 void XMLCALL ch(void *d,const XML_Char *s,int l) {
-  // ars *ar=malloc(sizeof(ars) * an);
   if (cx==2) { ar->ky=malloc((l+1)*sizeof(XML_Char)); strncpy(ar->ky,s,l); cx=1; }
   else if (cx==3) { ar->vl=malloc((l+1)*sizeof(XML_Char)); strncpy(ar->vl,s,l); cx=1; }
   return;
@@ -58,7 +56,6 @@ void XMLCALL ch(void *d,const XML_Char *s,int l) {
 int main(int ac,char **av) {
   if (ac<2) { printf("%s: no input file\n",*av); return -1; }
   if (ac>=3) { printf("%s: too many options\n",*av); return -1; }
-  // ars *ar=malloc(sizeof(ars)*an);
   XML_Parser xp=XML_ParserCreate("UTF-8");
   if (!xp) { printf("xml: can't allocate memory\n"); return -1; }
   FILE *px=fopen(*++av,"r");
