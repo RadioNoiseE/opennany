@@ -11,12 +11,13 @@
 
 #define bf 10240
 #define al 36
-#define an 6
+// #define an 6
+#define lw 2
 
 char *pt="openconnect --protocol=anyconnect --quiet --background ";
 
 int cx=0;
-int cn=an;
+// int cn=an;
 int ct=0;
 
 typedef struct rs {
@@ -49,10 +50,8 @@ void XMLCALL ee(void *d,const char *s) {
 
 void XMLCALL ch(void *d,const XML_Char *s,int l) {
   // ars *ar=malloc(sizeof(ars) * an);
-  if (cx==2||cx==3) {
-    if (cx==2) { ar->ky=malloc((l+1)*sizeof(XML_Char)); strncpy(ar->ky,s,l); cx=1; }
-    else { ar->vl=malloc((l+1)*sizeof(XML_Char)); strncpy(ar->vl,s,l); cx=1; }
-  }
+  if (cx==2) { ar->ky=malloc((l+1)*sizeof(XML_Char)); strncpy(ar->ky,s,l); cx=1; }
+  else if (cx==3) { ar->vl=malloc((l+1)*sizeof(XML_Char)); strncpy(ar->vl,s,l); cx=1; }
   return;
 }
 
@@ -77,7 +76,7 @@ int main(int ac,char **av) {
   printf("%s: extracting servers\n",*--av);
   setlocale(LC_CTYPE,"en_US.UTF-8");
   while (d++<ct) {
-    printf("[%2d] %*s\n",d-1,wcswidth(arr[d-1].ky),arr[d-1].ky);
+    printf("[%*d] %*s\n",lw,d-1,wcswidth(arr[d-1].ky),arr[d-1].ky);
     free(arr[d-1].ky);
   }
   printf("Server:");
