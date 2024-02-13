@@ -76,8 +76,7 @@ int main(int ac,char **av) {
     printf("[%*d] %*s\n",lw,d-1,wcswidth(arr[d-1].ky),arr[d-1].ky);
     free(arr[d-1].ky);
   }
-  printf("Server:");
-  scanf("%d",&f);
+  printf("Server:"); scanf("%d",&f);
   if (f<=ct) { char *cm=malloc((strlen(pt)+strlen(arr[f].vl)*sizeof(char))); if ((d=system(strcat(strcat(cm,pt),arr[f].vl)))!=0) printf("%s: syscall failed with return code %d\n",*av,d); else printf("%s: connected\n",*av); free(cm); }
   else printf("%s: index out of range\n",*av);
   XML_ParserFree(xp);
