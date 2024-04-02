@@ -24,9 +24,9 @@ typedef struct rs {
   char *ky;
   char *vl;
 } ars;
-// ars *ar = malloc(sizeof(ars) * an);
+// ars *ar=malloc(sizeof(ars) * an);
 ars arr[al];
-ars *ar = arr;
+ars *ar=arr;
 
 void XMLCALL se(void *d,const char *s,const char **a) {
   int *dp=d;
