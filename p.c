@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <uchar.h>
+#include <wchar.h>
 #include <locale.h>
 #include "expat.h"
 
@@ -13,6 +14,8 @@
 #define al 36
 // #define an 6
 #define lw 2
+#define mw 20
+#define nl 5
 
 char *pt="openconnect --protocol=anyconnect --quiet --background ";
 
@@ -27,6 +30,22 @@ typedef struct rs {
 // ars *ar=malloc(sizeof(ars) * an);
 ars arr[al];
 ars *ar=arr;
+
+int cjkw(const char *cs) {
+  int le=mbstowcs(NULL,cs,0)+1;
+  wchar_t *de=malloc(sizeof(wchar_t)*le);
+  if (!de) { printf("cjk: failed to allocate memory\n"); return -1;}
+  mbstowcs(de,cs,le);
+  int aw = 0;
+  wchar_t *tp=de;
+  while (*tp) {
+    if (*tp>=0x1100&&(*tp<=0x11FF||*tp>=0x2E80)) aw += 2; // in most cases they belong to the cjk plane
+    else aw += 1;
+    tp++;
+  }
+  free(de);
+  return aw;
+}
 
 void XMLCALL se(void *d,const char *s,const char **a) {
   int *dp=d;
@@ -71,11 +90,15 @@ int main(int ac,char **av) {
     if (XML_Parse(xp,b,l,f)!=XML_STATUS_ERROR) { printf("xml: invalid input, error %s at line %ld\n",XML_ErrorString(XML_GetErrorCode(xp)),XML_GetCurrentLineNumber(xp)); /* return -1; */ }
   } while (!f);
   printf("%s: extracting servers\n",*--av);
-  setlocale(LC_CTYPE,"en_US.UTF-8");
+  setlocale(LC_CTYPE,"");
   while (d++<ct) {
-    printf("[%*d] %*s\n",lw,d-1,wcswidth(arr[d-1].ky),arr[d-1].ky);
+    int pd=mw-cjkw(arr[d-1].ky);
+    printf("[%*d] %s",lw,d-1,arr[d-1].ky);
+    for (int j=0; j<pd; j++) printf(" ");
+    if (!(d%nl)) printf("\n");
     free(arr[d-1].ky);
   }
+  if ((d-1)%nl) printf("\n");
   printf("Server:"); scanf("%d",&f);
   if (f<=ct) { char *cm=malloc((strlen(pt)+strlen(arr[f].vl)*sizeof(char))); if ((d=system(strcat(strcat(cm,pt),arr[f].vl)))!=0) printf("%s: syscall failed with return code %d\n",*av,d); else printf("%s: connected\n",*av); free(cm); }
   else printf("%s: index out of range\n",*av);
