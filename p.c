@@ -36,11 +36,11 @@ int cjkw(const char *cs) {
   wchar_t *de=malloc(sizeof(wchar_t)*le);
   if (!de) { printf("cjk: failed to allocate memory\n"); return -1;}
   mbstowcs(de,cs,le);
-  int aw = 0;
+  int aw=0;
   wchar_t *tp=de;
   while (*tp) {
-    if (*tp>=0x1100&&(*tp<=0x11FF||*tp>=0x2E80)) aw += 2; // in most cases they belong to the cjk plane
-    else aw += 1;
+    if (*tp>=0x1100&&(*tp<=0x11FF||*tp>=0x2E80)) aw+=2; // in most cases they belong to the cjk plane
+    else aw+=1;
     tp++;
   }
   free(de);
@@ -94,7 +94,7 @@ int main(int ac,char **av) {
   while (d++<ct) {
     int pd=mw-cjkw(arr[d-1].ky);
     printf("[%*d] %s",lw,d-1,arr[d-1].ky);
-    for (int j=0; j<pd; j++) printf(" ");
+    for (int j=0;j<pd;j++) printf(" ");
     if (!(d%nl)) printf("\n");
     free(arr[d-1].ky);
   }
